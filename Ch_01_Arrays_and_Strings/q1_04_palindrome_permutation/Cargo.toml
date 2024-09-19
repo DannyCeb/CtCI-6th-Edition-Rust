@@ -1,0 +1,6 @@
+[package]
+name = "q1_04_palindrome_permutation"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
