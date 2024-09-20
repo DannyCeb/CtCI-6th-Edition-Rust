@@ -1,0 +1,6 @@
+[package]
+name = "q1_07_rotate_matrix"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
