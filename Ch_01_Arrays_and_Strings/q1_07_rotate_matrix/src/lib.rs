@@ -1,35 +1,37 @@
 pub mod solution {
 
-    pub fn rotate_matrix(m: &mut Vec<Vec<i32>>) -> bool {
-        if m.len() != m[0].len() {
+    pub fn rotate_matrix(matrix: &mut Vec<Vec<i32>>) -> bool {
+        if matrix.len() != matrix[0].len() {
             false
         } else {
-            let n = m.len();
+            let n = matrix.len();
 
             for layer in 0..(n / 2) {
                 for counter in 0..n - 1 - 2 * layer {
                     /*
                      * To understand the code consider the following:
                      *
-                     *      upper left iterator:   m[layer][layer + counter]
-                     *      upper right iterator:  m[layer + counter][n - layer - 1]
-                     *      bottom left iterator:  m[n - layer - 1 - counter][layer]
-                     *      bottom right position: m[n - layer - 1][n - layer - 1 - counter]
+                     *      upper left iterator:   matrix[layer][layer + counter]
+                     *      upper right iterator:  matrix[layer + counter][n - layer - 1]
+                     *      bottom left iterator:  matrix[n - layer - 1 - counter][layer]
+                     *      bottom right position: matrix[n - layer - 1][n - layer - 1 - counter]
                      */
                     // saves the bottom left value
-                    let aux = m[n - layer - 1 - counter][layer];
+                    let aux = matrix[n - layer - 1 - counter][layer];
 
                     // moves the bottom right value to the bottom left position
-                    m[n - layer - 1 - counter][layer] = m[n - layer - 1][n - layer - 1 - counter];
+                    matrix[n - layer - 1 - counter][layer] =
+                        matrix[n - layer - 1][n - layer - 1 - counter];
 
                     // moves the upper right value to the bottom right position
-                    m[n - layer - 1][n - layer - 1 - counter] = m[layer + counter][n - layer - 1];
+                    matrix[n - layer - 1][n - layer - 1 - counter] =
+                        matrix[layer + counter][n - layer - 1];
 
                     // moves the upper left value to the upper right position
-                    m[layer + counter][n - layer - 1] = m[layer][layer + counter];
+                    matrix[layer + counter][n - layer - 1] = matrix[layer][layer + counter];
 
                     // sets the saved bottom left value to the upper left position
-                    m[layer][layer + counter] = aux;
+                    matrix[layer][layer + counter] = aux;
                 }
             }
 
