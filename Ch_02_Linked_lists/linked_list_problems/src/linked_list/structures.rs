@@ -1,7 +1,8 @@
 use std::cell::RefCell;
-use std::fmt::Display;
-use std::hash::Hash;
+
 use std::rc::Rc;
+
+use crate::NodeItemTraits;
 
 /**
 * Struct Node
@@ -12,14 +13,14 @@ use std::rc::Rc;
 *      RefCell for inner mutability
 */
 #[derive(Debug)]
-pub struct Node<T: Copy + Display + Hash + Eq + Default> {
+pub struct Node<T: NodeItemTraits> {
     pub item: T,
     pub next: Option<Rc<RefCell<Node<T>>>>,
     pub previous: Option<Rc<RefCell<Node<T>>>>,
 }
 
 // Impl to create new nodes
-impl<T: Copy + Display + Hash + Eq + Default> Node<T> {
+impl<T: NodeItemTraits> Node<T> {
     pub fn new(
         item: T,
         next: Option<Rc<RefCell<Node<T>>>>,
@@ -45,14 +46,14 @@ impl<T: Copy + Display + Hash + Eq + Default> Node<T> {
  *
 */
 #[derive(Clone, Debug)]
-pub struct MyLinkedList<T: Copy + Display + Hash + Eq + Default> {
+pub struct MyLinkedList<T: NodeItemTraits> {
     pub first: Option<Rc<RefCell<Node<T>>>>,
     pub last: Option<Rc<RefCell<Node<T>>>>,
     iter: Option<Rc<RefCell<Node<T>>>>,
     iter_back: Option<Rc<RefCell<Node<T>>>>,
 }
 
-impl<T: Copy + Display + Hash + Eq + Default> MyLinkedList<T> {
+impl<T: NodeItemTraits> MyLinkedList<T> {
     pub fn new() -> Self {
         MyLinkedList {
             first: None,
@@ -104,7 +105,7 @@ impl<T: Copy + Display + Hash + Eq + Default> MyLinkedList<T> {
     }
 }
 
-impl<T: Copy + Display + Hash + Eq + Default> Iterator for MyLinkedList<T> {
+impl<T: NodeItemTraits> Iterator for MyLinkedList<T> {
     type Item = Rc<RefCell<Node<T>>>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -112,33 +113,47 @@ impl<T: Copy + Display + Hash + Eq + Default> Iterator for MyLinkedList<T> {
         match &self.iter {
             Some(node) => res = Some(node.clone()),
             None => {
-                return None;
+                res = None;
             }
         };
 
-        self.iter = self.iter.clone().unwrap().borrow().next.clone();
-
-        res
+        match &res {
+            Some(_) => {
+                self.iter = self.iter.clone().unwrap().borrow().next.clone();
+                res
+            }
+            None => {
+                self.iter = self.first.clone();
+                None
+            }
+        }
     }
 }
 
-impl<T: Copy + Display + Hash + Eq + Default> DoubleEndedIterator for MyLinkedList<T> {
+impl<T: NodeItemTraits> DoubleEndedIterator for MyLinkedList<T> {
     fn next_back(&mut self) -> Option<Self::Item> {
         let mut res = None;
         match &self.iter_back {
             Some(node) => res = Some(node.clone()),
             None => {
-                return None;
+                res = None;
             }
         };
 
-        self.iter = self.iter.clone().unwrap().borrow().previous.clone();
-
-        res
+        match &res {
+            Some(_) => {
+                self.iter_back = self.iter_back.clone().unwrap().borrow().previous.clone();
+                res
+            }
+            None => {
+                self.iter_back = self.last.clone();
+                None
+            }
+        }
     }
 }
 
-impl<T: Copy + Display + Hash + Eq + Default> std::fmt::Display for MyLinkedList<T> {
+impl<T: NodeItemTraits> std::fmt::Display for MyLinkedList<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut aux_node = self.first.clone();
         let mut str_res = "[".to_string();
@@ -169,7 +184,7 @@ impl<T: Copy + Display + Hash + Eq + Default> std::fmt::Display for MyLinkedList
     }
 }
 
-impl<T: Copy + Display + Hash + Eq + Default> PartialEq for MyLinkedList<T> {
+impl<T: NodeItemTraits> PartialEq for MyLinkedList<T> {
     fn eq(&self, other: &Self) -> bool {
         let mut myself = self.clone();
         let mut other_list = other.clone();
