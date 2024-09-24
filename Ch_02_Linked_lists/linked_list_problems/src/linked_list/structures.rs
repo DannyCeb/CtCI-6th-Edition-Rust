@@ -184,6 +184,18 @@ impl<T: NodeItemTraits> std::fmt::Display for MyLinkedList<T> {
     }
 }
 
+impl<T: NodeItemTraits> FromIterator<T> for MyLinkedList<T> {
+    fn from_iter<K: IntoIterator<Item = T>>(iter: K) -> Self {
+        let mut list: MyLinkedList<T> = MyLinkedList::new();
+
+        for l in iter {
+            list.push_back(l);
+        }
+
+        list
+    }
+}
+
 impl<T: NodeItemTraits> PartialEq for MyLinkedList<T> {
     fn eq(&self, other: &Self) -> bool {
         let mut myself = self.clone();

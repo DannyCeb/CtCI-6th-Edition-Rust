@@ -1,21 +1,17 @@
-use linked_list_problems::linked_list::structures::MyLinkedList;
+use linked_list_problems::{
+    linked_list::structures::MyLinkedList, q2_04_partition::solution::partition,
+};
 
 fn main() {
     let mut my_linked_list: MyLinkedList<i32> = MyLinkedList::new();
-    println!("LL: {}", &my_linked_list);
 
-    my_linked_list.push_back(0);
-    my_linked_list.push_back(1);
-    my_linked_list.push_front(-1);
-    my_linked_list.push_back(2);
-    my_linked_list.push_front(0);
-    my_linked_list.push_back(2);
-
-    println!("LL: {}", &my_linked_list);
-
-    for l in &mut my_linked_list {
-        println!("{}", l.borrow().item);
+    for l in [3, 5, 8, 5, 10, 2, 1] {
+        my_linked_list.push_back(l);
     }
 
     println!("LL: {}", &my_linked_list);
+
+    let res = partition(&mut my_linked_list, 5);
+
+    println!("result: {}", res);
 }
