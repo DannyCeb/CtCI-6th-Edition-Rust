@@ -105,6 +105,7 @@ impl<T: NodeItemTraits> MyLinkedList<T> {
     }
 }
 
+#[allow(unused_assignments)]
 impl<T: NodeItemTraits> Iterator for MyLinkedList<T> {
     type Item = Rc<RefCell<Node<T>>>;
 
@@ -130,6 +131,7 @@ impl<T: NodeItemTraits> Iterator for MyLinkedList<T> {
     }
 }
 
+#[allow(unused_assignments)]
 impl<T: NodeItemTraits> DoubleEndedIterator for MyLinkedList<T> {
     fn next_back(&mut self) -> Option<Self::Item> {
         let mut res = None;
