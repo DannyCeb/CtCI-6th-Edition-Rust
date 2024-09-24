@@ -7,7 +7,7 @@ mod solution {
         structures::{MyLinkedList, Node},
     };
 
-    impl<T: Copy + Display + Hash + Eq> MyLinkedList<T> {
+    impl<T: Copy + Display + Hash + Eq + Default> MyLinkedList<T> {
         pub fn remove_dups(&mut self) -> Result<String, LinkedListError> {
             let mut buffer: HashMap<T, u8> = HashMap::new();
 

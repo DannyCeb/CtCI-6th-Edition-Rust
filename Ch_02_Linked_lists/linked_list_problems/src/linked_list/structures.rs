@@ -12,14 +12,14 @@ use std::rc::Rc;
 *      RefCell for inner mutability
 */
 #[derive(Debug)]
-pub struct Node<T: Copy + Display + Hash + Eq> {
+pub struct Node<T: Copy + Display + Hash + Eq + Default> {
     pub item: T,
     pub next: Option<Rc<RefCell<Node<T>>>>,
     pub previous: Option<Rc<RefCell<Node<T>>>>,
 }
 
 // Impl to create new nodes
-impl<T: Copy + Display + Hash + Eq> Node<T> {
+impl<T: Copy + Display + Hash + Eq + Default> Node<T> {
     pub fn new(
         item: T,
         next: Option<Rc<RefCell<Node<T>>>>,
@@ -45,18 +45,20 @@ impl<T: Copy + Display + Hash + Eq> Node<T> {
  *
 */
 #[derive(Clone, Debug)]
-pub struct MyLinkedList<T: Copy + Display + Hash + Eq> {
+pub struct MyLinkedList<T: Copy + Display + Hash + Eq + Default> {
     pub first: Option<Rc<RefCell<Node<T>>>>,
     pub last: Option<Rc<RefCell<Node<T>>>>,
     iter: Option<Rc<RefCell<Node<T>>>>,
+    iter_back: Option<Rc<RefCell<Node<T>>>>,
 }
 
-impl<T: Copy + Display + Hash + Eq> MyLinkedList<T> {
+impl<T: Copy + Display + Hash + Eq + Default> MyLinkedList<T> {
     pub fn new() -> Self {
         MyLinkedList {
             first: None,
             last: None,
             iter: None,
+            iter_back: None,
         }
     }
 
@@ -78,6 +80,7 @@ impl<T: Copy + Display + Hash + Eq> MyLinkedList<T> {
         }
 
         self.iter = self.first.clone();
+        self.iter_back = self.last.clone();
     }
 
     pub fn push_back(&mut self, item: T) {
@@ -97,10 +100,11 @@ impl<T: Copy + Display + Hash + Eq> MyLinkedList<T> {
             self.first = Some(new_node)
         }
         self.iter = self.first.clone();
+        self.iter_back = self.last.clone();
     }
 }
 
-impl<T: Copy + Display + Hash + Eq> Iterator for MyLinkedList<T> {
+impl<T: Copy + Display + Hash + Eq + Default> Iterator for MyLinkedList<T> {
     type Item = Rc<RefCell<Node<T>>>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -118,7 +122,23 @@ impl<T: Copy + Display + Hash + Eq> Iterator for MyLinkedList<T> {
     }
 }
 
-impl<T: Copy + Display + Hash + Eq> std::fmt::Display for MyLinkedList<T> {
+impl<T: Copy + Display + Hash + Eq + Default> DoubleEndedIterator for MyLinkedList<T> {
+    fn next_back(&mut self) -> Option<Self::Item> {
+        let mut res = None;
+        match &self.iter_back {
+            Some(node) => res = Some(node.clone()),
+            None => {
+                return None;
+            }
+        };
+
+        self.iter = self.iter.clone().unwrap().borrow().previous.clone();
+
+        res
+    }
+}
+
+impl<T: Copy + Display + Hash + Eq + Default> std::fmt::Display for MyLinkedList<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut aux_node = self.first.clone();
         let mut str_res = "[".to_string();
@@ -149,7 +169,7 @@ impl<T: Copy + Display + Hash + Eq> std::fmt::Display for MyLinkedList<T> {
     }
 }
 
-impl<T: Copy + Display + Hash + Eq> PartialEq for MyLinkedList<T> {
+impl<T: Copy + Display + Hash + Eq + Default> PartialEq for MyLinkedList<T> {
     fn eq(&self, other: &Self) -> bool {
         let mut myself = self.clone();
         let mut other_list = other.clone();
@@ -190,6 +210,7 @@ mod tests {
         res_ll.first = Some(Rc::new(RefCell::new(Node::new(7, None, None))));
         res_ll.last = res_ll.first.clone();
         res_ll.iter = res_ll.first.clone();
+        res_ll.iter_back = res_ll.last.clone();
 
         assert_eq!(my_list, res_ll);
     }
