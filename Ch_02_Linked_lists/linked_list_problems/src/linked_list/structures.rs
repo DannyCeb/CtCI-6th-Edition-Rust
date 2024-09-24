@@ -5,7 +5,7 @@ use std::rc::Rc;
 
 /**
 * Struct Node
-* Contains any type of value which implements the Copy and the Display trait
+* Contains any type of value which implements the Copy, Hash, Eq and the Display trait
 * points to next and previous using
 *      option enum (For none variant)
 *      Rc For different refferences
@@ -170,5 +170,27 @@ impl<T: Copy + Display + Hash + Eq> PartialEq for MyLinkedList<T> {
             }
         }
         true
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::{cell::RefCell, rc::Rc};
+
+    use super::{MyLinkedList, Node};
+
+    #[test]
+    fn test_insert() {
+        let mut my_list: MyLinkedList<i32> = MyLinkedList::new();
+
+        my_list.push_back(7);
+
+        let mut res_ll: MyLinkedList<i32> = MyLinkedList::new();
+
+        res_ll.first = Some(Rc::new(RefCell::new(Node::new(7, None, None))));
+        res_ll.last = res_ll.first.clone();
+        res_ll.iter = res_ll.first.clone();
+
+        assert_eq!(my_list, res_ll);
     }
 }
