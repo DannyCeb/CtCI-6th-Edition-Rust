@@ -13,7 +13,9 @@ fn main() {
 
     println!("LL: {}", &my_linked_list);
 
-    let _ = my_linked_list.remove_dups();
+    for l in &mut my_linked_list {
+        println!("{}", l.borrow().item);
+    }
 
     println!("LL: {}", &my_linked_list);
 }

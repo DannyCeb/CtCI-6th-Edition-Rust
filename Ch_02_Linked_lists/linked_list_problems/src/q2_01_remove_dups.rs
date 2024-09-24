@@ -1,13 +1,16 @@
 mod solution {
 
-    use std::{cell::RefCell, cmp::Eq, collections::HashMap, fmt::Display, hash::Hash, rc::Rc};
+    use std::{cell::RefCell, collections::HashMap, rc::Rc};
 
-    use crate::linked_list::{
-        ll_error::LinkedListError,
-        structures::{MyLinkedList, Node},
+    use crate::{
+        linked_list::{
+            ll_error::LinkedListError,
+            structures::{MyLinkedList, Node},
+        },
+        NodeItemTraits,
     };
 
-    impl<T: Copy + Display + Hash + Eq + Default> MyLinkedList<T> {
+    impl<T: NodeItemTraits> MyLinkedList<T> {
         pub fn remove_dups(&mut self) -> Result<String, LinkedListError> {
             let mut buffer: HashMap<T, u8> = HashMap::new();
 

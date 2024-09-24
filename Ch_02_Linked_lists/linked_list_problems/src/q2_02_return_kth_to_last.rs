@@ -1,23 +1,40 @@
-mod solution {
+pub mod solution {
 
-    use crate::linked_list::structures::MyLinkedList;
+    use crate::{linked_list::structures::MyLinkedList, NodeItemTraits};
 
-    pub fn return_kth_to_last<
-        T: Copy + std::fmt::Display + std::hash::Hash + std::cmp::Eq + Default,
-    >(
-        list: &mut MyLinkedList<T>,
-        k: usize,
-    ) -> T {
+    pub fn return_kth_to_last<T: NodeItemTraits>(list: &MyLinkedList<T>, k: usize) -> Option<T> {
         let mut counter: usize = 0;
-        let mut res: T = T::default();
-        for l in list.rev() {
+
+        for l in list.clone().rev() {
             if counter == k {
-                res = l.borrow().item;
-                break;
+                return Some(l.borrow().item);
             }
             counter += 1;
         }
 
-        res
+        None
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{
+        linked_list::structures::MyLinkedList,
+        q2_02_return_kth_to_last::solution::return_kth_to_last,
+    };
+
+    #[test]
+    fn test_n_element() {
+        let mut my_l = MyLinkedList::<i32>::new();
+
+        for l in 0..10 {
+            my_l.push_back(l);
+        }
+
+        assert_eq!(Some(8), return_kth_to_last(&my_l, 1));
+
+        assert_eq!(Some(2), return_kth_to_last(&my_l, 7));
+
+        assert_eq!(None, return_kth_to_last(&my_l, 20));
     }
 }
