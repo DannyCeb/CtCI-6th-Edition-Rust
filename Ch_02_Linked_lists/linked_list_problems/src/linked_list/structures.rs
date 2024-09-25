@@ -6,7 +6,7 @@ use crate::NodeItemTraits;
 
 use super::ll_error::LinkedListError;
 
-/**
+/*
 * Struct Node
 * Contains any type of value which implements the Copy, Hash, Eq and the Display trait
 * points to next and previous using
@@ -43,7 +43,6 @@ impl<T: NodeItemTraits> Node<T> {
  * its able to:
  *      Push back
  *      Push front
- *      
  *      Be displayed to the console using the Display trait
  *
 */

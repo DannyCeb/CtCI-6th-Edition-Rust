@@ -6,6 +6,7 @@ pub mod q2_04_partition;
 pub mod q2_05_sum_lists;
 pub mod q2_06_palindrome;
 pub mod q2_07_intersection;
+pub mod q2_08_loop_detection;
 
 pub trait NodeItemTraits:
     Copy + std::fmt::Display + std::hash::Hash + Eq + Default + std::cmp::PartialOrd
