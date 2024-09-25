@@ -1,8 +1,11 @@
+use std::borrow::Borrow;
 use std::cell::RefCell;
 
 use std::rc::Rc;
 
 use crate::NodeItemTraits;
+
+use super::ll_error::LinkedListError;
 
 /**
 * Struct Node
@@ -103,6 +106,25 @@ impl<T: NodeItemTraits> MyLinkedList<T> {
         self.iter = self.first.clone();
         self.iter_back = self.last.clone();
     }
+
+    pub fn pop_back(&mut self) -> Result<T, LinkedListError> {
+        if let Some(pointer) = self.last.clone() {
+            let t_val = pointer.as_ref().borrow().item;
+
+            if pointer.clone().as_ref().borrow().previous.is_none() {
+                self.first = None;
+                self.last = None;
+            } else {
+                let prev_p = pointer.clone().as_ref().borrow().previous.clone().unwrap();
+                prev_p.as_ref().borrow_mut().next = None;
+                self.last = Some(prev_p.clone());
+            }
+
+            Ok(t_val)
+        } else {
+            Err(LinkedListError::EmptyList)
+        }
+    }
 }
 
 #[allow(unused_assignments)]
@@ -111,16 +133,16 @@ impl<T: NodeItemTraits> Iterator for MyLinkedList<T> {
 
     fn next(&mut self) -> Option<Self::Item> {
         let mut res = None;
-        match &self.iter {
+        match self.iter.clone() {
             Some(node) => res = Some(node.clone()),
             None => {
                 res = None;
             }
         };
 
-        match &res {
+        match res.clone() {
             Some(_) => {
-                self.iter = self.iter.clone().unwrap().borrow().next.clone();
+                self.iter = self.iter.clone().unwrap().as_ref().borrow().next.clone();
                 res
             }
             None => {
@@ -144,7 +166,14 @@ impl<T: NodeItemTraits> DoubleEndedIterator for MyLinkedList<T> {
 
         match &res {
             Some(_) => {
-                self.iter_back = self.iter_back.clone().unwrap().borrow().previous.clone();
+                self.iter_back = self
+                    .iter_back
+                    .clone()
+                    .unwrap()
+                    .as_ref()
+                    .borrow()
+                    .previous
+                    .clone();
                 res
             }
             None => {
@@ -164,7 +193,7 @@ impl<T: NodeItemTraits> std::fmt::Display for MyLinkedList<T> {
         loop {
             match &aux_node {
                 Some(node) => {
-                    let val = node.borrow().item;
+                    let val = node.as_ref().borrow().item;
                     if aux != 0 {
                         str_res = format!("{},{}", str_res, val);
                     } else {
@@ -177,7 +206,7 @@ impl<T: NodeItemTraits> std::fmt::Display for MyLinkedList<T> {
                 }
             }
 
-            aux_node = aux_node.unwrap().borrow().next.clone();
+            aux_node = aux_node.unwrap().as_ref().borrow().next.clone();
         }
 
         str_res.push_str("]");
