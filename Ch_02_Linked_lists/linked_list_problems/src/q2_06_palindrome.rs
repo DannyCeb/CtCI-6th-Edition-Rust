@@ -32,7 +32,7 @@ mod solution {
 
 #[cfg(test)]
 mod tests {
-    use crate::{linked_list::structures::MyLinkedList, q2_05_palindrome::solution::is_palindrome};
+    use crate::{linked_list::structures::MyLinkedList, q2_06_palindrome::solution::is_palindrome};
 
     #[test]
     fn test_is_palindrome() {
