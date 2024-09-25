@@ -1,4 +1,3 @@
-use std::borrow::Borrow;
 use std::cell::RefCell;
 
 use std::rc::Rc;
@@ -48,7 +47,7 @@ impl<T: NodeItemTraits> Node<T> {
  *      Be displayed to the console using the Display trait
  *
 */
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct MyLinkedList<T: NodeItemTraits> {
     pub first: Option<Rc<RefCell<Node<T>>>>,
     pub last: Option<Rc<RefCell<Node<T>>>>,
@@ -248,6 +247,37 @@ impl<T: NodeItemTraits> PartialEq for MyLinkedList<T> {
             }
         }
         true
+    }
+}
+
+impl<T: NodeItemTraits> core::fmt::Debug for MyLinkedList<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut aux_node = self.first.clone();
+        let mut str_res = "[".to_string();
+        let mut aux = 0;
+
+        loop {
+            match &aux_node {
+                Some(node) => {
+                    let val = node.as_ref().borrow().item;
+                    if aux != 0 {
+                        str_res = format!("{},{}", str_res, val);
+                    } else {
+                        str_res = format!("{}{}", str_res, val);
+                        aux = 1;
+                    }
+                }
+                None => {
+                    break;
+                }
+            }
+
+            aux_node = aux_node.unwrap().as_ref().borrow().next.clone();
+        }
+
+        str_res.push_str("]");
+
+        write!(f, "{}", str_res)
     }
 }
 
