@@ -7,17 +7,15 @@ fn main() {
         l1.push_back(l);
     }
 
-    let l2 = l1.clone();
-
     l1.push_front(0);
     l1.push_front(-1);
     l1.push_front(-2);
 
-    println!("l1: {}\nl2: {}", &l1, &l2);
+    let mut v = vec![];
 
     for l in l1.clone().into_iter() {
-        for k in l2.clone().into_iter() {
-            println!("{}", std::ptr::eq(l.as_ptr(), k.as_ptr()));
-        }
+        v.push(format!("{:p}", l));
     }
+
+    println!("{:?}", v);
 }
