@@ -12,7 +12,7 @@ fn main() {
 
     let mut l2 = MyLinkedList::<i32>::new();
 
-    for l in [5, 9, 9] {
+    for l in [5, 9] {
         l2.push_back(l);
     }
 

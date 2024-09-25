@@ -146,7 +146,7 @@ impl<T: NodeItemTraits> Iterator for MyLinkedList<T> {
                 res
             }
             None => {
-                self.iter = self.first.clone();
+                //self.iter = self.first.clone();
                 None
             }
         }
@@ -157,14 +157,14 @@ impl<T: NodeItemTraits> Iterator for MyLinkedList<T> {
 impl<T: NodeItemTraits> DoubleEndedIterator for MyLinkedList<T> {
     fn next_back(&mut self) -> Option<Self::Item> {
         let mut res = None;
-        match &self.iter_back {
+        match self.iter_back.clone() {
             Some(node) => res = Some(node.clone()),
             None => {
                 res = None;
             }
         };
 
-        match &res {
+        match res.clone() {
             Some(_) => {
                 self.iter_back = self
                     .iter_back
@@ -177,7 +177,7 @@ impl<T: NodeItemTraits> DoubleEndedIterator for MyLinkedList<T> {
                 res
             }
             None => {
-                self.iter_back = self.last.clone();
+                //self.iter_back = self.last.clone();
                 None
             }
         }
