@@ -130,23 +130,12 @@ impl<T: NodeItemTraits> Iterator for MyLinkedList<T> {
     type Item = Rc<RefCell<Node<T>>>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let mut res = None;
         match self.iter.clone() {
-            Some(node) => res = Some(node.clone()),
-            None => {
-                res = None;
-            }
-        };
-
-        match res.clone() {
-            Some(_) => {
+            Some(res) => {
                 self.iter = self.iter.clone().unwrap().as_ref().borrow().next.clone();
-                res
+                Some(res)
             }
-            None => {
-                //self.iter = self.first.clone();
-                None
-            }
+            None => None,
         }
     }
 }
@@ -154,16 +143,8 @@ impl<T: NodeItemTraits> Iterator for MyLinkedList<T> {
 #[allow(unused_assignments)]
 impl<T: NodeItemTraits> DoubleEndedIterator for MyLinkedList<T> {
     fn next_back(&mut self) -> Option<Self::Item> {
-        let mut res = None;
         match self.iter_back.clone() {
-            Some(node) => res = Some(node.clone()),
-            None => {
-                res = None;
-            }
-        };
-
-        match res.clone() {
-            Some(_) => {
+            Some(res) => {
                 self.iter_back = self
                     .iter_back
                     .clone()
@@ -172,12 +153,9 @@ impl<T: NodeItemTraits> DoubleEndedIterator for MyLinkedList<T> {
                     .borrow()
                     .previous
                     .clone();
-                res
+                Some(res)
             }
-            None => {
-                //self.iter_back = self.last.clone();
-                None
-            }
+            None => None,
         }
     }
 }
