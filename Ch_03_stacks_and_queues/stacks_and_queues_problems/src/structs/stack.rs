@@ -4,6 +4,7 @@ use crate::NodeItemTraits;
 
 use super::node::Node;
 
+#[derive(Debug)]
 pub struct MyStack<T: NodeItemTraits> {
     top: Option<Rc<RefCell<Node<T>>>>,
     iter: Option<Rc<RefCell<Node<T>>>>,

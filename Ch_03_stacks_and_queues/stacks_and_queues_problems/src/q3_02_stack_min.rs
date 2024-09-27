@@ -1,4 +1,4 @@
-mod solution {
+pub mod solution {
     use std::{i32, ops::Deref};
 
     use crate::structs::stack::MyStack;

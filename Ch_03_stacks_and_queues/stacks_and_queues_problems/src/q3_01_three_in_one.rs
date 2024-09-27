@@ -1,4 +1,4 @@
-mod solution {
+pub mod solution {
 
     struct StackPointers {
         end_of_stack: usize,
