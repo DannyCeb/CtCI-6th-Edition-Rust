@@ -14,7 +14,7 @@ pub mod solution {
             while !node_queue.is_empty() {
                 let actual_node = node_queue.remove(0);
 
-                if actual_node.clone().as_ref().borrow().state == State::Visited {
+                if actual_node.as_ref().borrow().state == State::Visited {
                     continue;
                 } else {
                     actual_node.as_ref().borrow_mut().state = State::Visited;
