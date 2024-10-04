@@ -19,18 +19,22 @@ pub mod solution {
     }
 
     pub fn create_binary_search_tree(numbers: &[i32]) -> Option<Rc<RefCell<BinNode>>> {
-        let pivot = numbers.len() / 2;
-        match pivot {
-            0 => Some(Rc::new(RefCell::new(BinNode::new(
-                numbers[pivot],
-                None,
-                None,
-            )))),
-            _ => Some(Rc::new(RefCell::new(BinNode::new(
-                numbers[pivot],
-                create_binary_search_tree(&numbers[..pivot]),
-                create_binary_search_tree(&numbers[pivot..]),
-            )))),
+        if numbers.len() == 0 {
+            None
+        } else {
+            let pivot = numbers.len() / 2;
+            match pivot {
+                0 => Some(Rc::new(RefCell::new(BinNode::new(
+                    numbers[pivot],
+                    None,
+                    None,
+                )))),
+                _ => Some(Rc::new(RefCell::new(BinNode::new(
+                    numbers[pivot],
+                    create_binary_search_tree(&numbers[..pivot]),
+                    create_binary_search_tree(&numbers[pivot + 1..]),
+                )))),
+            }
         }
     }
 }
