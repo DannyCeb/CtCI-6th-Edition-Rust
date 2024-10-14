@@ -6,3 +6,4 @@ pub mod q4_03_list_of_depths;
 pub mod q4_04_check_balanced;
 pub mod q4_05_validate_bst;
 pub mod q4_06_successor;
+pub mod q4_07_build_order;
